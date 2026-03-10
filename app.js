@@ -14,15 +14,29 @@ require('./models/UserModel');
 require('./models/PostModel');
 
 // ---------------- CORS ----------------
-const corsOptions = {
-  origin: [
-    'http://localhost:5173', // local frontend
-    process.env.FRONTEND_URL // production frontend
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+// ---------------- CORS ----------------
+const allowedOrigins = [
+  'http://localhost:5173', // local frontend
+  'https://frontenddevto-production.up.railway.app' // production frontend
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-};
+}));
+
+// Handle preflight requests for all routes
+app.options('*', cors());
 
 app.use(cors(corsOptions));
 
