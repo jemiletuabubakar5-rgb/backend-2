@@ -38,7 +38,7 @@ app.use(cors({
 // Handle preflight requests for all routes
 app.options('*', cors());
 
-app.use(cors(corsOptions));
+
 
 // ---------------- DATABASE ----------------
 mongoose.connect(process.env.MONGODB_URI, {
